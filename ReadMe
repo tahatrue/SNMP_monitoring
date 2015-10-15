@@ -1,0 +1,94 @@
+Network Monitoring Tool
+=======================
+Aim : The goal of our project is to monitor the network connectivity of multiple devices interconnected to each other remotely via a front end. The displayed data in the front end is fetched from the database where all the devices information is stored.
+
+Basic Installations:
+--------------------
+1)apt-get update
+2)apt-get upgrade
+3)apt-get install snmp
+4)apt-get install snmpd
+5)apt-get install snmp-mibs-downloader 
+6)apt-get install apache2
+7)apt-get install mysql-server
+
+Modules Required:
+-----------------
+1)Net::SNMP
+2)Net::SNMP:Interfaces
+3)Net::Ping
+4)DBI
+5)DBD::mysql
+
+Steps:
+------
+1) Extract the "team3.tar.gz" file and copy the ".php" and extension files to /var/www directory. You run the tool with existing data (step 1) or fresh start up (step 2) and the tool should run under root privilege "sudo su", so that it has permission to execute without any trouble.
+
+Step 1:
+=======
+a) Create a database with name as “team3” and import the required tables by loading the “team3.sql" extension file in your localhost/phpmyadmin destination. 
+b) Edit the configuration files “config.pl” (Team3/Manager/) and “configure.php” (Team3/Web/) to suit your environment. 
+c) Goto the homepage : localhost/phpmyadmin/welcome.php. 
+d) There exists a public view button at the bottom of the page which is for the unauthorized users who can view limited amount of devices information like switch name, ports, speed, status of the device interfaces. 
+e) There is an authorized access page for the network administrator who can view all the information about the devices such as the list of MAC addresses of devices connected to it, VLAN info, add or remove devices, etc by logging in with 
+	"Username: team3" and 
+	"Password: 2k14". 
+f) ****************NOTE: The backend will not run in this stage****************. 
+
+Intermediate Steps before going to Step 2: 
+------------------------------------------ 
+a)Before going for fresh start up i.e Step 2, you need to remove complete database of Step 1. 
+b)Use can do that in 2 ways either by running perl program "droptables.pl" in terminal or by using the button "Drop All Tables" under options in the member page. 
+c)Once you drop all tables (Input and Output tables), you can see the message on the member page stating that "create input table". If you got any error like "not found page" after dropping tables, then just press the back button of the browser. 
+d)Now you are good to move to Step 2 i.e fresh start up. 
+
+Step 2: 
+======= 
+
+a) Create a database with name as “team3”. 
+b) Edit the configuration files “config.pl” (Team3/Manager/) and “configure.php” (Team3/Web/) to suit your environment. 
+c) You have to create input table (switch table) in the database, which can be done either by running the “calltoteam3.pl" file from terminal or by using the button "Create Input Table" under options in the member page. 
+d) Now the running “calltoteam3.pl” file will execute the program from terminal, which will run the main perl program "team3.pl" periodically for every 10 seconds. 
+All the output tables will created when the perl program runs for the 1st time and if there r already exists then it will not create them again. 
+
+e) Goto the homepage : localhost/phpmyadmin/welcome.php. 
+
+f) There exists a public view button at the bottom of the page which is for the unauthorized users who can view limited amount of devices information like switch name, ports, speed, status of the device interfaces, as there is no devices to view, you can see the status message. 
+g) Using the login details, login to the member page and under the “options” drop down menu select the “add device” to add it. 
+h) There is an authorized access page for the network administrator who can view all the information about the devices such as the list of MAC addresses of devices connected to it, VLAN info, add or remove devices, etc by logging in with 
+	"Username: team3" and 
+	"Password: 2k14". 
+i) Once the device is added, you can see the added device in the member page. You should wait for 10 seconds in-order the back-end to run as it runs for every 10 seconds. 
+j) You will have access to view all devices or add a device or drop all tables. 
+k) ****************NOTE: The backend will run in this stage periodically for every 10 seconds****************. 
+
+
+PHP pages description:
+----------------------
+All the web pages reloads for every 4 seconds. 
+"Welcome.php" - Home page 
+"info.php" - Public view for switches table information .
+"ports.php" - Public view for selected switch informaton .
+"info1.php" - Member page view for switches table information with "Add/Remove devices" access. 
+"ports1.php" - Member page view for selected switch detailed information .
+"mac.php" - Member page view for selected switch "List of MAC addresses connected to it" information. 
+“insert.php”- Member page view for adding a Device.
+
+
+Perl Program description:
+-------------------------
+1)team3.pl - In this program they are 3 stages. "Stage one" is connecting to database credentials and once its connected it fetches the details from the input table (Switch table) then using the ping module, the program check the IP for response and if it responds and data is fetched then its moved to "Stage two" otherwise the nonresponse IP is insert in the "non devices" table which is pushed to front end with status message to inform the authenticate user. "Stage two" is getting the complete details of the particular switch. "Stage three" is inserting the details into the database, which further pushed to front end. 
+2)calltoteam3.pl - This program is used to run the main program "team3.pl" periodically for every 16 seconds.
+
+
+Usage:
+------
+
+1) This tools will give the details of a selected device like description of the particular switch. 
+2) There is a “non devices” table which holds the IP of the devices which are non ping and non response. 
+3) We use this “non devices” table to alert the web user that particular the device has some problems, which helps the user edit the given details of the device. 
+4) Once the device is non ping or non response, it will be deleted from both tables “switch and non devices”. 
+5) There is additional drop down menu option in the member page to access to particular purpose, which helps the user to access them right away. 
+6) If any unauthorized user try to access member page, it will be redirected to the welcome page. 
+7) Once you finished using tool, stop the back-end perl program by pressing ctrl+c on keyboard. 
+8) Finally i hope this information is helpful to use this tool.

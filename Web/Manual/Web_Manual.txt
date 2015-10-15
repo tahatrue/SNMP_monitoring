@@ -1,0 +1,26 @@
+*******************Web Manual**************
+This is a manual for descrbing the usage of the web page
+
+Home page - Welcome.php
+
+*****Public page*****
+The public page is available for all and its called info.php. 
+It can be accessed via the main page welcome.php with a click of a button named "Public View".
+The public view page has a table with a list of switches and their system description. A button called View is available for every switch selection that redirects you to the page that contains detailed info about the selected switch. In the table there are some thresholds that are indicated with different colors. In the top left of the page you can find the button to redirect to the homepage. 
+
+****Private page****
+The private page is provided for the admin. It can be accessed from the welcome.php home page by logging in with a 
+username - team3
+password - 2k14
+
+It makes it possible to add and remove devices from the front-end via a graphical interface. 
+The add device(s) redirects you to a site where you can insert a 
+device that you want to probe. You can do it by filling in the 
+information in the field and press insert. Or you can use sql syntax 
+to add multiple devices. The remove device(s) redirects you to a site where you can remove a 
+specific device. 
+
+The private page just like public page has a table with list of switches and a button for selection which will redirect you to switch details as well as advanced switch information which is not available for the public viewer.
+Also, there is a table named "nondevices" which will be used to store the devices that don't respond to SNMP requests and act on user prompt when there is an invalid IP entered or no response from the device.
+When the user clicks on view button corresponding to the device IP which doesnt respond or has an invalid IP address, the device row is automatically deleted from the input switch table.
+

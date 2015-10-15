@@ -1,0 +1,36 @@
+#!/usr/bin/perl -w
+use strict;
+use DBI;
+use DBD::mysql;
+                                    #Database Name="team3";
+                                    #Host="localhost";
+                                    #Database User Name="root";
+                                    #Database Password="1";                           
+$|=1;
+require 'config.pl';
+
+our ($data_base,$host,$db_user,$db_pw);
+
+
+my $dbh=DBI->connect(
+  "DBI:mysql:$data_base:$host:3306",
+  "$db_user",
+  "$db_pw" , { 'PrintError' => 1, 'RaiseError' => 1, 'AutoCommit' => 1 }
+) || die "Error connecting to database:".$data_base.":".$DBI::errstr."\n";
+
+
+my $check = $dbh->prepare("CREATE TABLE IF NOT EXISTS `switch` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `IP` varchar(100) NOT NULL,  
+  `Community` varchar(100) NOT NULL,
+  `Port` int(11) NOT NULL,
+  `Name` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ; ") or die ("Cannot create switch table : ". mysql_error()."\n");
+
+    if (!$check->execute) {
+        die "Can't execute switch table ".$check->errstr."\n";
+    }
+    $check->finish();
+    
+
